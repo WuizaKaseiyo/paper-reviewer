@@ -1,0 +1,32 @@
+# Vessel DNA for Paper Reviewer Pro
+# Loaded by OMC's vessel_config.load_vessel_config(emp_dir)
+# Falls back to OMC's default_vessel.yaml for any field omitted here.
+
+runner:
+  module: ""              # empty → standard EmployeeAgent (LangChain)
+  class_name: ""
+
+hooks:
+  module: ""
+  pre_task: ""
+  post_task: ""
+
+context:
+  prompt_sections: []     # talent_persona.md auto-injected by onboarding
+  inject_progress_log: true
+  inject_task_history: true
+
+limits:
+  # Peer review demands deep read of a 30-50 page paper + many small tool calls
+  max_retries: 3
+  retry_delays: [10, 30, 60]
+  max_subtask_iterations: 3
+  max_subtask_depth: 1                   # peer reviewer should NOT dispatch children
+  task_timeout_seconds: 2400             # 40 min (deep read + multi-section + fact check)
+  max_iterations: 80                     # LangGraph recursion_limit (default 25 too small)
+
+capabilities:
+  file_upload: true                      # CEO may upload paper PDFs or LaTeX zips
+  websocket: true
+  sandbox: false
+  image_generation: false

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/1mancompany/talent-template/main/schemas/manifest.schema.json",
+  "settings_ui": {
+    "sections": [
+      {
+        "title": "API Keys (optional but recommended)",
+        "fields": [
+          {
+            "name": "S2_API_KEY",
+            "label": "Semantic Scholar API Key",
+            "type": "secret",
+            "required": false,
+            "description": "Get one at https://www.semanticscholar.org/product/api — without it, reference verification is heavily rate-limited."
+          }
+        ]
+      },
+      {
+        "title": "Review Behavior",
+        "fields": [
+          {
+            "name": "REVIEW_VENUE",
+            "label": "Target venue",
+            "type": "text",
+            "required": false,
+            "default": "",
+            "description": "Optional: target venue name (e.g. 'OSDI 2027'). Tunes strictness — top-tier systems venues are harsher than workshops."
+          },
+          {
+            "name": "STRICT_CITATION_CHECK",
+            "label": "Block on any unverified reference",
+            "type": "toggle",
+            "default": true,
+            "description": "If on, every .bib entry must verify against arxiv/Crossref/SS before review submits."
+          },
+          {
+            "name": "MAX_PAPERS_TO_FACT_CHECK",
+            "label": "Max cited PDFs to fetch for fact-checking",
+            "type": "number",
+            "default": 10,
+            "description": "Higher = stricter attribution check but slower + more expensive."
+          }
+        ]
+      }
+    ]
+  }
+}

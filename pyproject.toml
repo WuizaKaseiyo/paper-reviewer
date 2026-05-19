@@ -1,0 +1,23 @@
+# Pure-skill talent — no Python package to build.
+# This file exists for talent-template / IDE convenience only; OMC does not
+# read it during onboarding (OMC just copies skills/ and profile.yaml).
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "paper-reviewer-talent"
+version = "0.1.0"
+description = "Reviewer-2 talent for AutoResearch Stage 9 / OMC peer review (pure-skill — no custom tools)"
+readme = "README.md"
+license = { text = "TMAL-1.0" }
+requires-python = ">=3.10"
+authors = [{ name = "Steven", email = "stevenkaseiyo@gmail.com" }]
+
+# Empty — talent has no Python package, no installable deps.
+dependencies = []
+
+[tool.setuptools]
+packages = []
+py-modules = []
