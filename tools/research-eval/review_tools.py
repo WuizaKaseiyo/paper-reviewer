@@ -73,7 +73,9 @@ _HTTP_BLOCKED_HOSTS = {
 
 _SKILL_NAME_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 
-_BUILTIN_SKILLS_DIR = Path(__file__).parent / "skills"
+# This module lives at <repo>/tools/research-eval/; the talent's skills/ folder
+# is at the repo root (two levels up from this file's directory).
+_BUILTIN_SKILLS_DIR = Path(__file__).resolve().parent.parent.parent / "skills"
 
 
 def _extract_description(content: str) -> str:

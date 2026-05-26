@@ -25,12 +25,12 @@ bash tools/research-eval/run.sh review \
     --output-format markdown|json
 ```
 
-`run.sh` wraps the repo-root CLI (`python cli.py`). Exit code is `1` on
-desk-rejection failure or any fabricated experiment/citation, else `0`.
+`run.sh` wraps `cli.py` in this folder. Exit code is `1` on desk-rejection
+failure or any fabricated experiment/citation, else `0`.
 
 ## Internal tools (driven by the engine's LLM judge)
 
-Implemented in the repo-root modules `review_tools.py` / `extra_tools.py`:
+Implemented in this folder's `review_tools.py` / `extra_tools.py`:
 
 | Group | Tools |
 |---|---|
@@ -41,5 +41,6 @@ Implemented in the repo-root modules `review_tools.py` / `extra_tools.py`:
 
 ## Setup
 
-`pip install -e .` from the repo root (Python ≥ 3.10). Credentials via
-`api-key.md` (copy `api-key.example.md`) or env vars. See the root README.
+`pip install -e tools/research-eval` from the repo root (Python ≥ 3.10).
+Credentials via `api-key.md` (copy `api-key.example.md` in this folder) or env
+vars. See the root README.

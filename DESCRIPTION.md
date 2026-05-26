@@ -47,6 +47,30 @@ per-citation authenticity appendices — every verdict carrying evidence
 <!-- Share real-world results or testimonials -->
 <!-- Example: "Caught 3 hallucinated citations and 2 unbacked table numbers in a draft before submission." -->
 
+## Methodology & Rules
+
+The reviewer follows a 7-step workflow (see `skills/research-eval-review/SKILL.md`):
+map the paper → desk-rejection screen → map the workspace → audit experimental
+claims → audit citations → score the rubric → submit.
+
+Hard rules it holds itself to:
+
+- **Evidence only.** Never fabricate evidence — cite only what tool outputs
+  actually returned (workspace `file:line`, log lines, numbers, source URLs).
+- **Missing ≠ confirmed.** When a citation can't be found after ≥3 differently
+  phrased searches, it is `fabricated`; when merely hard to confirm, `unverifiable`
+  (never silently `verified`). Experiment numbers absent from the workspace lean
+  `fabricated`, but only after checking for aliases / other locations.
+- **Audit every citation**, not just the load-bearing ones — hallucinations hide
+  in routine references.
+- **Consistent severity.** Two similar issues get the same tier.
+- **Self-contained output.** Every structured finding is also reflected in the
+  filled review markdown.
+
+Status taxonomies — experiments: `verified` / `partially_verified` / `unverifiable`
+/ `contradicted` / `fabricated`; citations: `verified` / `metadata_mismatch` /
+`unverifiable` / `fabricated`. Overall score is 1 (Strong Reject) … 6 (Strong Accept).
+
 ---
 
 > **Content Policy**: This description is publicly visible on the Talent Market platform.
