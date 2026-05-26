@@ -1,4 +1,4 @@
-# Vessel DNA for Paper Reviewer Pro
+# Vessel DNA for Research Eval
 # Loaded by OMC's vessel_config.load_vessel_config(emp_dir)
 # Falls back to OMC's default_vessel.yaml for any field omitted here.
 
@@ -17,16 +17,18 @@ context:
   inject_task_history: true
 
 limits:
-  # Peer review demands deep read of a 30-50 page paper + many small tool calls
+  # The agentic review does heavy I/O: page through a 30–50pp PDF, map the
+  # workspace, grep every reported number, and web-verify every citation
+  # (one or more web_search per reference). This is many small tool calls.
   max_retries: 3
   retry_delays: [10, 30, 60]
   max_subtask_iterations: 3
-  max_subtask_depth: 1                   # peer reviewer should NOT dispatch children
-  task_timeout_seconds: 2400             # 40 min (deep read + multi-section + fact check)
-  max_iterations: 80                     # LangGraph recursion_limit (default 25 too small)
+  max_subtask_depth: 1                   # reviewer should NOT dispatch children
+  task_timeout_seconds: 3600             # 60 min (deep read + per-number + per-citation audit)
+  max_iterations: 200                    # matches research_eval evaluator _MAX_TURNS
 
 capabilities:
-  file_upload: true                      # CEO may upload paper PDFs or LaTeX zips
+  file_upload: true                      # CEO may upload paper PDFs + workspace zips
   websocket: true
-  sandbox: false
+  sandbox: true                          # engine runs run_command / python_eval against the workspace
   image_generation: false

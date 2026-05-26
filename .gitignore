@@ -32,6 +32,9 @@ htmlcov/
 review_runs/
 *.jsonl.bak
 
+# research-eval credentials (copy api-key.example.md → api-key.md)
+api-key.md
+
 # Test artifacts
 tests/_tmp/
 tests/.cache/

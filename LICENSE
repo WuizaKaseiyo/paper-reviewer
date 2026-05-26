@@ -36,6 +36,7 @@ THIRD-PARTY ATTRIBUTION:
 - Built on the Talent Market template by Zhengxu Yu / 1mancompany
   (https://github.com/1mancompany/talent-template), licensed under TMAL v1.0.
 
-- Verification tool design (verify_references) adapted from companion talent
-  literature-surveyor (https://github.com/WuizaKaseiyo/literature-surveyor),
-  same authorship.
+- The research_eval/ engine bundles or optionally uses: anthropic, openai,
+  pypdf, beautifulsoup4, httpx, markdownify, and (optional) playwright — each
+  under its own upstream license. web_search is powered by Tavily; vision tools
+  use Gemini via OpenRouter.

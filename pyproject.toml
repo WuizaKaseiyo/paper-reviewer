@@ -1,23 +1,40 @@
-# Pure-skill talent — no Python package to build.
-# This file exists for talent-template / IDE convenience only; OMC does not
-# read it during onboarding (OMC just copies skills/ and profile.yaml).
-
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "paper-reviewer-talent"
+name = "research-eval"
 version = "0.1.0"
-description = "Reviewer-2 talent for AutoResearch Stage 9 / OMC peer review (pure-skill — no custom tools)"
+description = "Agentic LLM peer-reviewer with experiment + citation authenticity audits (OMC Stage 9 talent)"
 readme = "README.md"
 license = { text = "TMAL-1.0" }
 requires-python = ">=3.10"
 authors = [{ name = "Steven", email = "stevenkaseiyo@gmail.com" }]
+dependencies = [
+    "anthropic>=0.40.0",
+    "openai>=1.30.0",
+    # PDF reading + HTML cleanup are core (paper review = PDF in 90% of cases)
+    "pypdf>=4.0.0",
+    "beautifulsoup4>=4.12.0",
+    "httpx>=0.25.0",
+    "markdownify>=0.11.6",
+]
 
-# Empty — talent has no Python package, no installable deps.
-dependencies = []
+[project.optional-dependencies]
+# Optional: render HTML reports to PNG and run vision models on PDF page renders.
+vision = [
+    "playwright>=1.40.0",
+]
+all = [
+    "playwright>=1.40.0",
+]
 
-[tool.setuptools]
-packages = []
-py-modules = []
+[project.scripts]
+research-eval = "research_eval.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["research_eval*"]
+
+[tool.setuptools.package-data]
+research_eval = ["skills/*.md", "review_template_en.md"]

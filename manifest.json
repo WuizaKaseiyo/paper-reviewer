@@ -3,19 +3,53 @@
   "settings_ui": {
     "sections": [
       {
-        "title": "API Keys (optional but recommended)",
+        "title": "Model credentials",
         "fields": [
           {
-            "name": "S2_API_KEY",
-            "label": "Semantic Scholar API Key",
+            "name": "ANTHROPIC_API_KEY",
+            "label": "Anthropic API Key",
             "type": "secret",
             "required": false,
-            "description": "Get one at https://www.semanticscholar.org/product/api — without it, reference verification is heavily rate-limited."
+            "description": "Used when the reviewer runs on Claude (the default, best for long-context paper review). Set this OR OPENAI_API_KEY depending on your model."
+          },
+          {
+            "name": "OPENAI_API_KEY",
+            "label": "OpenAI-compatible API Key",
+            "type": "secret",
+            "required": false,
+            "description": "Used for OpenAI / OpenRouter / DeepSeek / Qwen and other OpenAI-compatible endpoints. Pair with a base URL if using a proxy."
           }
         ]
       },
       {
-        "title": "Review Behavior",
+        "title": "Authenticity-audit tools",
+        "fields": [
+          {
+            "name": "TAVILY_API_KEY",
+            "label": "Tavily API Key (web_search)",
+            "type": "secret",
+            "required": false,
+            "description": "Powers web_search for citation verification. A built-in dev-tier fallback key exists, but a dedicated key avoids rate limits. Get one at https://tavily.com."
+          },
+          {
+            "name": "OPENROUTER_API_KEY",
+            "label": "OpenRouter API Key (vision tools)",
+            "type": "secret",
+            "required": false,
+            "description": "Required only for vision_inspect / video_understand (Gemini via OpenRouter) — used to read figures/tables off PDF page renders."
+          },
+          {
+            "name": "GEMINI_MODEL",
+            "label": "Vision model slug",
+            "type": "text",
+            "required": false,
+            "default": "google/gemini-3-pro-preview",
+            "description": "Overrides the model used for vision_inspect / video_understand."
+          }
+        ]
+      },
+      {
+        "title": "Review behavior",
         "fields": [
           {
             "name": "REVIEW_VENUE",
@@ -23,21 +57,22 @@
             "type": "text",
             "required": false,
             "default": "",
-            "description": "Optional: target venue name (e.g. 'OSDI 2027'). Tunes strictness — top-tier systems venues are harsher than workshops."
+            "description": "Optional: target venue (e.g. 'OSDI 2027'). Passed as extra context to tune strictness."
           },
           {
-            "name": "STRICT_CITATION_CHECK",
-            "label": "Block on any unverified reference",
+            "name": "AUDIT_ALL_CITATIONS",
+            "label": "Audit every citation in the bibliography",
             "type": "toggle",
             "default": true,
-            "description": "If on, every .bib entry must verify against arxiv/Crossref/SS before review submits."
+            "description": "If on, the reviewer verifies the entire reference list, not just load-bearing ones (hallucinations hide in routine citations)."
           },
           {
-            "name": "MAX_PAPERS_TO_FACT_CHECK",
-            "label": "Max cited PDFs to fetch for fact-checking",
-            "type": "number",
-            "default": 10,
-            "description": "Higher = stricter attribution check but slower + more expensive."
+            "name": "OUTPUT_FORMAT",
+            "label": "Report format",
+            "type": "select",
+            "options": ["markdown", "json"],
+            "default": "markdown",
+            "description": "Final report format. Markdown is human-readable; JSON is machine-readable for CI gating."
           }
         ]
       }

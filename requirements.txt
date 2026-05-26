@@ -1,4 +1,12 @@
-# This is a pure-skill talent — no Python dependencies are needed.
-# The talent runs inside OMC's LangChain agent using only stock base tools
-# (read, ls, glob_files, grep_search, write, bash). No external libraries
-# to install when the talent is hired.
+# research-eval engine dependencies.
+# Canonical source is pyproject.toml; this file mirrors it for OMC onboarding
+# / `pip install -r requirements.txt` flows.
+anthropic>=0.40.0
+openai>=1.30.0
+pypdf>=4.0.0
+beautifulsoup4>=4.12.0
+httpx>=0.25.0
+markdownify>=0.11.6
+
+# Optional (vision_inspect / render_html_screenshot):
+#   playwright>=1.40.0   # then: playwright install chromium
