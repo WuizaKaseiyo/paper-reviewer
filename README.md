@@ -157,7 +157,7 @@ my_project/
 ## 仓库结构
 
 标准 talent-template 布局 —— 根目录只有 talent 元数据 + 两个文件夹(`skills/`、`tools/`);
-agentic 引擎作为 custom tool 完整放在 `tools/research-eval/` 下:
+引擎按官方 **MCP** 形态封装(`tools/.mcp.json` 声明 server + `tools/<tool>/TOOL.md` 文档):
 
 ```
 paper-reviewer/
@@ -168,23 +168,28 @@ paper-reviewer/
 ├── README.md
 ├── LICENSE                  # TMAL v1.0
 ├── skills/                  # 每个技能一个文件夹 <name>/SKILL.md
-│   ├── research-eval-review/SKILL.md  # 7 步评审+审计工作流(autoload)
+│   ├── research-eval-review/SKILL.md  # 评审+审计工作流(autoload;指导宿主调用 MCP 工具)
 │   ├── peer_reviewer/SKILL.md         # Stage 9 流水线匹配键别名
-│   └── <9 个 workflow>/SKILL.md        # invoke_skill 调用(desk_rejection_screen 等)
+│   └── <9 个 workflow>/SKILL.md        # 引擎内部 invoke_skill 调用(desk_rejection_screen 等)
 └── tools/
-    ├── manifest.yaml                  # 工具声明
-    └── research-eval/                 # ★ 引擎作为 custom tool(全部实现在此)
-        ├── TOOL.md / manifest.yaml    # 工具文档 + 元数据
-        ├── run.sh                     # `python cli.py` 薄包装
-        ├── cli.py                     # CLI 入口(`research-eval` console script)
+    ├── .mcp.json                      # MCP server 声明(标准格式)
+    └── research-eval/                 # MCP server "research-eval"
+        ├── TOOL.md                    # 工具文档(暴露的工具:review_paper)
+        ├── server.py                  # ★ MCP server(FastMCP,暴露 review_paper)
+        ├── cli.py                     # 同一引擎的 standalone CLI 入口
         ├── evaluator.py               # agentic 评审主循环(_MAX_TURNS=200)
         ├── backends.py                # Anthropic / OpenAI-compatible 后端
-        ├── review_tools.py / extra_tools.py  # ~16 个工具(paper/workspace/web/vision)
+        ├── review_tools.py / extra_tools.py  # ~16 个内部工具(paper/workspace/web/vision)
         ├── models.py / report.py / config.py
         ├── review_template_en.md      # 评审模板(rubric)
-        ├── api-key.example.md         # 凭证模板(复制成 api-key.md)
+        ├── api-key.example.md         # standalone CLI 的凭证模板
         └── pyproject.toml / requirements.txt
 ```
+
+被 hire 后,宿主(OMC employee)通过 `tools/.mcp.json` 启动 `research-eval` MCP server,
+调用它暴露的 **`review_paper(paper, workspace, …)`** 工具 —— 该工具内部跑完整 agentic 评审
+(桌面筛查 → 实验真实性审计 → 引用核实 → 打分),返回填好的评审报告 + 真实性附录。
+同一套引擎也保留了 standalone CLI(见下文)。
 
 ---
 

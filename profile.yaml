@@ -43,5 +43,3 @@ system_prompt_template: >
   workspace that produced it — cross-checking every experimental number and
   verifying every citation, and flagging fabrications with concrete evidence.
 agent_family: omctalent
-tools:
-  - research-eval

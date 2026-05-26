@@ -15,8 +15,8 @@ STAGES[8] = {"id": 9, "skill": "peer_reviewer", "name": "Self-Review"}
 ```
 
 The actual methodology lives in **`research-eval-review`** (which is autoloaded
-into the system prompt) and is implemented by the engine modules at the repo root
-(`cli.py`, `evaluator.py`, `review_tools.py`, …). This
+into the system prompt) and is implemented by the `research-eval` MCP server under
+`tools/research-eval/` (exposing the `review_paper` tool). This
 file exists so the `skills/` folder structure matches `profile.yaml.skills[0]`
 per Talent Market template convention ("skills list corresponding to folder names").
 

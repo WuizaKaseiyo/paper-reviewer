@@ -23,10 +23,23 @@ allegedly produced it (code, configs, logs, results). Your job is twofold:
    against the workspace, and verify every citation against the public literature.
    Flag fabrications.
 
-The engine that backs this talent (flat modules at the repo root) exposes the tools named
-below. When running as an OMC employee, use the equivalent base tools
-(`read`, `grep_search`, `glob_files`, `bash`, `write`) plus web access for the
-same steps.
+## How to run it (MCP)
+
+This talent ships an MCP server `research-eval` (see `tools/.mcp.json`) exposing
+a single tool:
+
+```
+review_paper(paper, workspace, extra_context="", output_format="markdown")
+```
+
+To review a paper, **call `review_paper`** with the paper file and the workspace
+that produced it. The tool runs the entire agentic review internally and returns
+the filled review template plus the experiment / citation authenticity findings —
+you do not need to drive the steps yourself.
+
+- `paper` — path to the `.pdf` / `.md`.
+- `workspace` — the dir the paper claims to be based on (empty dir → citation-only screen).
+- `extra_context` — venue, focus areas, or budget caps.
 
 ## When to use
 
@@ -36,16 +49,14 @@ same steps.
 - Catching hallucinated citations — references that do not exist in the literature.
 - Citation-only screens (point the workspace at an empty dir; focus on the bibliography).
 
-## Tools the engine provides
+## What `review_paper` does internally
 
-| Group | Tools |
-|---|---|
-| Paper / workspace | `read_paper`, `read_file`, `read_file_lines`, `list_files`, `search_in_files`, `run_command`, `write_file`, `python_eval`, `http_request` |
-| Web / vision      | `web_search`, `web_fetch`, `large_doc_reader`, `render_html_screenshot`, `vision_inspect`, `video_understand` |
-| Composite         | `invoke_skill` (loads one of the 9 engine workflows below) |
-| Final             | `submit_review` (call exactly once at the end) |
+The engine drives the 7-step workflow below using its own tools (`read_paper`,
+`search_in_files`, `run_command`, `python_eval`, `web_search`, `web_fetch`,
+`invoke_skill` for the 9 workflow skills, and `submit_review`). This section is
+documentation of that behavior — the host only calls `review_paper`.
 
-## Workflow (7 steps)
+## Workflow (7 steps, performed by the engine)
 
 ### Step 1 — Map the paper
 - `read_paper(mode='overview')` first: total chars, chunk count, headings, preview.

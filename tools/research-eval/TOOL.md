@@ -1,46 +1,45 @@
 ---
 name: research-eval
-description: Agentic paper reviewer + authenticity auditor — reviews a paper against its workspace, verifying every experimental number and citation, then fills the review template.
+description: Review a paper and audit it against its workspace — verifying every experimental number and citation — via MCP.
 ---
 
-# Research Eval
+# Research Eval Tool
 
-The engine that backs this talent. Given a paper (PDF / markdown) and the
-workspace that produced it, it runs an agentic review loop that:
+MCP server (declared in `tools/.mcp.json`) that exposes one tool, `review_paper`.
+It runs a full agentic review of a research paper against the workspace that
+produced it: a desk-rejection screen, an experiment-authenticity audit that
+cross-checks the paper's load-bearing numbers against the workspace's real
+logs/results/code, citation verification against the public literature, and
+rubric scoring — flagging fabricated experiments and hallucinated citations with
+evidence, then filling the review template (Parts I–VI).
 
-1. Desk-rejection screen (length / topic / required sections / prompt injection).
-2. Audits each load-bearing experimental number against the workspace's real
-   logs / results / code.
-3. Verifies each citation against the public literature (web search).
-4. Fills the review template (Parts I–VI) and emits authenticity appendices.
+## Tool: `review_paper`
 
-## Usage
+| Argument | Required | Description |
+|---|---|---|
+| `paper` | ✅ | Path to the paper file (`.pdf` or `.md`). |
+| `workspace` | ✅ | Directory the paper claims to be based on (code/configs/logs/results). An empty dir → citation-only screen. |
+| `extra_context` | — | Notes for the reviewer (target venue, focus areas, budget caps). |
+| `output_format` | — | `markdown` (default) or `json`. |
 
-```
-bash tools/research-eval/run.sh review \
-    --paper <paper.pdf|paper.md> \
-    --workspace <dir the paper claims to be based on> \
-    --config api-key.md \
-    --output review.md \
-    --output-format markdown|json
-```
+Returns the filled review template plus per-experiment and per-citation
+authenticity findings (each verdict carries evidence: a workspace `file:line` or
+a source URL).
 
-`run.sh` wraps `cli.py` in this folder. Exit code is `1` on desk-rejection
-failure or any fabricated experiment/citation, else `0`.
+## When to use
 
-## Internal tools (driven by the engine's LLM judge)
+- Stress-test a paper before submission, with its code/data workspace available.
+- AutoResearch Stage 9 (Self-Review): adversarially audit a pipeline's own paper.
+- Catch fabricated results (numbers in no log/result file) or hallucinated citations.
+- Citation-only screens (point `workspace` at an empty directory).
 
-Implemented in this folder's `review_tools.py` / `extra_tools.py`:
+## Configuration (env / secrets)
 
-| Group | Tools |
-|---|---|
-| Paper / workspace | `read_paper`, `read_file`, `read_file_lines`, `list_files`, `search_in_files`, `run_command`, `write_file`, `python_eval`, `http_request` |
-| Web / vision      | `web_search`, `web_fetch`, `large_doc_reader`, `render_html_screenshot`, `vision_inspect`, `video_understand` |
-| Composite         | `invoke_skill` (loads a `skills/<name>/SKILL.md` workflow) |
-| Final             | `submit_review` |
+Set via the empty `env` values in `tools/.mcp.json` after hiring:
 
-## Setup
+- `ANTHROPIC_API_KEY` — use Claude (default if present), or `OPENAI_API_KEY` for
+  an OpenAI-compatible endpoint.
+- `TAVILY_API_KEY` — web search for citation verification.
+- `RESEARCH_EVAL_MODEL` — override the model id (optional).
 
-`pip install -e tools/research-eval` from the repo root (Python ≥ 3.10).
-Credentials via `api-key.md` (copy `api-key.example.md` in this folder) or env
-vars. See the root README.
+The same engine is also runnable as a standalone CLI (`cli.py`); see the root README.

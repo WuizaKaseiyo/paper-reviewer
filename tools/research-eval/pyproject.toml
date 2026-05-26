@@ -13,6 +13,8 @@ authors = [{ name = "Steven", email = "stevenkaseiyo@gmail.com" }]
 dependencies = [
     "anthropic>=0.40.0",
     "openai>=1.30.0",
+    # MCP server (tools/.mcp.json declares server.py)
+    "mcp>=1.0.0",
     # PDF reading + HTML cleanup are core (paper review = PDF in 90% of cases)
     "pypdf>=4.0.0",
     "beautifulsoup4>=4.12.0",
