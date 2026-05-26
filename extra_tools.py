@@ -46,8 +46,9 @@ _TOOL_NAMES: set[str] = {
 _DEFAULT_GEMINI_MODEL = "google/gemini-3-pro-preview"
 _DEFAULT_BASE_URL     = "https://openrouter.ai/api/v1"
 
-# Override at runtime with TAVILY_API_KEY env var.
-_BUILTIN_TAVILY_KEY = "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"
+# No hardcoded credentials — web_search requires TAVILY_API_KEY in the env
+# (configurable as a secret after hiring; see manifest.json / api-key.example.md).
+_BUILTIN_TAVILY_KEY = ""
 
 
 def _gemini_model() -> str:
